@@ -3,7 +3,7 @@
 import HandleComponent from "@/components/HandleComponent";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import NextImage from 'next/image';
 import { Rnd } from 'react-rnd';
 import { RadioGroup } from '@headlessui/react'
@@ -12,7 +12,8 @@ import { COLORS, MODELS, MATERIALS, FINISHES } from "@/validators/option-validat
 import { Label } from "@/components/ui/label";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
+import { BASE_PRICE } from "@/config/products";
 
 
 interface DesignConfiguratorProps {
@@ -73,7 +74,7 @@ const DesignConfigurator = ({
                 </Rnd>
             </div>
 
-            <div className="flex flex-col bg-white h-[37.5em]">
+            <div className="flex flex-col bg-white h-[37.5em] w-full col-span-full lg:col-span-1">
                 <ScrollArea className="relative overflow-auto flex-1">
                     <div aria-hidden="true" className="absolute z-10 inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white pointer-events-none" />
                     <div className="px-8 pb-12 pt-8">
@@ -155,6 +156,11 @@ const DesignConfigurator = ({
                                                             ) : null}
                                                         </span>
                                                     </span>
+                                                    <RadioGroup.Description as="span" className="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm-flex-col sm:text-right">
+                                                        <span className="font-medium text-gray-900">
+                                                            {formatPrice(option.price/100)}
+                                                        </span>
+                                                    </RadioGroup.Description>
                                                 </RadioGroup.Option>
                                             ))}
                                         </div>
@@ -164,10 +170,21 @@ const DesignConfigurator = ({
                         </div>
                     </div>
                 </ScrollArea>
+                <div className="w-full px-8 h-16 bg-white">
+                    <div className="h-px w-full bg-zinc-200" />
+                    <div className="w-full h-full flex justify-end items-center">
+                        <div className="w-full flex gap-6 items-center">
+                            <p className="font-medium whitespace-nowrap">
+                                {formatPrice((BASE_PRICE + options.finish.price +options.material.price)/100)}
+                            </p>
+                            <Button size="sm" className="w-full">
+                                Continue
+                                <ArrowRight  className="h-4 w-4 ml-1.5 inline"/>
+                            </Button>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
-
         </div>
     )
 }
